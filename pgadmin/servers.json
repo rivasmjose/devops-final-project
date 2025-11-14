@@ -6,8 +6,7 @@
       "Host": "db",
       "Port": 5432,
       "MaintenanceDB": "notesdb",
-      "Username": "notes",
-      "Password": "notes",
+      "Username": "notesuser",
       "SSLMode": "prefer",
       "Comment": "Automatically added server"
     }

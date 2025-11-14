@@ -1,34 +1,22 @@
 <!DOCTYPE html>
-<html>
-  <head><title>Notes App</title></head>
-  <body>
-    <h1>Notes</h1>
-    <form id="noteForm">
-      <input name="title" placeholder="Title" required />
-      <br>
-      <textarea name="content" placeholder="Content"></textarea>
-      <br>
-      <button type="submit">Add Note</button>
-    </form>
-    <ul>
-      {% for n in notes %}
-      <li><b>{{ n.title }}</b>: {{ n.content }}</li>
-      {% endfor %}
-    </ul>
-    <script>
-      document.getElementById("noteForm").addEventListener("submit", async (e) => {
-        e.preventDefault();
-        const fd = new FormData(e.target);
-        await fetch("/api/notes", {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({
-            title: fd.get("title"),
-            content: fd.get("content")
-          })
-        });
-        window.location.reload();
-      });
-    </script>
-  </body>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Notes App</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}" />
+</head>
+<body>
+  <h1>📝  Notes App  📝</h1>
+
+  <form id="noteForm">
+    <input type="text" id="title" placeholder="Note title" required />
+    <textarea id="content" placeholder="Note content" rows="3" required></textarea>
+    <button type="submit">Add Note</button>
+  </form>
+
+  <div id="notes"></div>
+
+  <script src="{{ url_for('static', filename='js/script.js') }}"></script>
+</body>
 </html>

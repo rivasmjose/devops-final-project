@@ -14,9 +14,6 @@ RUN pip install --no-cache-dir -r requirements.txt
 
 COPY . .
 
-COPY wait-for-postgres.sh /wait-for-postgres.sh
-RUN chmod +x /wait-for-postgres.sh
-
 EXPOSE 5000
 
-CMD ["/wait-for-postgres.sh", "db", "python", "app.py"]
+CMD ["python", "app.py"]
