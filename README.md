@@ -20,7 +20,7 @@ This project demonstrates a complete **DevOps workflow**, including:
 - **Infrastructure as Code (IaC)** with Docker Compose
 - **Containerized application** (Python/Flask + PostgreSQL)
 - **Database management** (pgAdmin)
-- **Monitoring** with Prometheus + Grafana
+- **Monitoring** with Prometheus + Grafana + cAdvisor
 - **Environment separation:** *development*, *staging*, *production*
 
 The application is a simple **Notes API** with persistence, metrics, and dashboards.
@@ -47,7 +47,7 @@ The application is a simple **Notes API** with persistence, metrics, and dashboa
 | **Database Management** | pgAdmin |
 | **CI/CD** | GitHub Actions |
 | **Testing** | Pytest |
-| **Monitoring** | Prometheus, Grafana, Node Exporter |
+| **Monitoring** | Prometheus, Grafana, cAdvisor |
 | **DevOps Practices** | Makefile, Linting |
 
 ---
@@ -66,6 +66,7 @@ All components are declared in `docker-compose.yml`:
 - `app`: Flask microservice
 - `db`: PostgreSQL database
 - `pgadmin`: for DB administration
+- `cAdvisor`: Container advisor to collect CPU, memory filesystem and network usage
 - `prometheus`: for metrics scraping
 - `grafana`: for dashboards
 
@@ -208,6 +209,7 @@ make down
 | **Flask App**   | http://localhost5000 |
 | **PostgreSQL**  | `localhost:5432`    |
 | **pgAdmin**     | http://localhost:8080 |
+| **cAdvisor**     | http://localhost:8081 |
 | **prometheus**  | http://localhost:9090 |
 | **Grafana**     | http://localhost:3000|
 
@@ -234,11 +236,25 @@ pgAdmin automatically loads server settings from: `pgadmin/servers.json`
 
 | Metric | Importance |
 |--------|------------|
-| **Request Count** | Tracks traffic and system behavior |
-| **Container Health** | Ensures reliable deployments |
+| **Request Count** (`flask_http_request_total` or `http_requests_total`) | Tracks traffic and system behavior |
+| **Container Health** (`container_last_seen` or `up`) | Ensures reliable deployments |
+| **CPU Usage** (`rate(container_cpu_usage_seconds_total[5m])`) | Detects performance bottlenecks |
+| **Memory Usage** (`container_memory_usage_bytes`) | Prevents out-of-memory issues |
+| **Network I/O** (`rate(container_network_receive_bytes_total[5m])`, `rate(container_network_transmit_bytes_total[5m])`) | Monitors data flow between services |
+| **Disk I/O** (`rate(container_fs_reads_bytes_total[5m])`, `rate(container_fs_writes_bytes_total[5m])`) | Tracks storage performance |
+| **Error Rate** (`rate(flask_http_request_total{status=~"5.."}[5m])`) | Identifies failing requests |
+| **Uptime** (`process_start_time_seconds`) | Confirms service availability |
+
 
 ---
 ### 📈 Monitoring
+
+#### 📊 cAdvisor
+- **Dashboard**
+http://localhost:8081
+
+- **Metrics**
+http://localhost:8081/metrics
 
 #### 🔍 Prometheus
 - **Access Prometheus at:**
