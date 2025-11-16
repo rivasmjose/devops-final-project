@@ -1,4 +1,4 @@
-.PHONY: info build pull up down restart logs clean test lint
+.PHONY: info build pull up down logs clean
 
 ENV ?= dev
 
@@ -27,9 +27,7 @@ up:
 	docker compose $(COMPOSE_FILE) up -d
 
 down:
-	docker compose $(COMPOSE_FILE) down -v
-
-restart: down up
+	docker compose $(COMPOSE_FILE) down -v --remove-orphans
 
 logs:
 	docker compose $(COMPOSE_FILE) logs -f
@@ -38,9 +36,3 @@ clean:
 	docker container prune -f
 	docker network prune -f
 	docker volume prune -f
-
-test:
-	docker compose $(COMPOSE_FILE) run --rm app pytest -q
-
-lint:
-	docker compose $(COMPOSE_FILE) run --rm app flake8 app

@@ -2,9 +2,9 @@ name: CI/CD Pipeline
 
 on:
   push:
-    branches: [ "main" ]
+    branches: [ "dev" ]
   pull_request:
-    branches: [ "main" ]
+    branches: [ "stage", "prod" ]
   workflow_dispatch:
     inputs:
       environment:
@@ -22,6 +22,9 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
+      - name: Print Environment
+        run: echo "Running in ${{ github.event.inputs.environment }}"
+
       - name: Set up Python
         uses: actions/setup-python@v5
         with:
@@ -31,17 +34,20 @@ jobs:
         run: |
           python -m pip install --upgrade pip
           pip install -r app/requirements.txt
-          pip install pytest pytest-cov
 
       - name: Run tests with coverage threshold
         run: |
           pytest --cov=app --cov-report=term --cov-report=xml --cov-report=html --cov-fail-under=80
 
       - name: Upload coverage report
+        if: always()
         uses: actions/upload-artifact@v4
         with:
           name: coverage-report-${{ matrix.python-version }}
-          path: htmlcov/
+          path: |
+            htmlcov/
+            retention-days: 1
+
 
   report:
     needs: test
@@ -79,8 +85,11 @@ jobs:
 
   manual-approval-stage-to-main:
     needs: report
-    if: github.event_name == 'pull_request' && github.base_ref == 'main' && github.head_ref == 'stage'
+    if: github.event_name == 'pull_request' && github.base_ref == 'prod' && github.head_ref == 'stage'
     runs-on: ubuntu-latest
+    environment:
+        name: production
+        url: http://notes-app.com
     steps:
       - name: Require Manual Approval
         run: |
