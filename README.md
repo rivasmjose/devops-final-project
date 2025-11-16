@@ -1,2 +1,298 @@
-# devops-final-project
-Demonstrate a complete DevOps workflow combining CI/CD, testing, IaC, and monitoring for a small containerised application — showing how automation and visibility improve reliability and speed in an R&amp;D or engineering context.
+# 🚀 DevOps Final Project – Notes App (Flask + PostgreSQL + Prometheus + Grafana) 🚀
+
+![CI/CD Pipeline](https://img.shields.io/github/actions/workflow/status/rivasmjose/devops-final-project/ci.yml?label=CI%2FCD&logo=github)
+![Docker Image](https://img.shields.io/badge/Docker-Image-blue?logo=docker)
+![License](https://img.shields.io/badge/License-MIT-green)
+![Status](https://img.shields.io/badge/Status-Active-success)
+![Infrastructure as Code](https://img.shields.io/badge/IaC-Docker%20Compose-orange?logo=docker)
+![Monitoring](https://img.shields.io/badge/Monitoring-Prometheus%20%2B%20Grafana-red?logo=prometheus)
+![Database UI](https://img.shields.io/badge/Database%20Management-pgAdmin-blue?logo=postgresql)
+
+---
+---
+
+## 📌 Project Overview
+
+This project demonstrates a complete **DevOps workflow**, including:
+
+- **CI/CD** automation using GitHub Actions
+- **Automated testing** (unit tests)
+- **Infrastructure as Code (IaC)** with Docker Compose
+- **Containerized application** (Python/Flask + PostgreSQL)
+- **Database management** (pgAdmin)
+- **Monitoring** with Prometheus + Grafana
+- **Environment separation:** *development*, *staging*, *production*
+
+The application is a simple **Notes API** with persistence, metrics, and dashboards.
+
+---
+---
+
+## 👥 Team Members
+
+- *(Team member names)*
+-
+-
+
+---
+---
+
+## 🛠️ Technologies Used
+
+| Area | Tools |
+|------|-------|
+| **Backend** | Python, Flask |
+| **Containerization** | Docker, Docker Compose |
+| **Database** | PostgreSQL |
+| **Database Management** | pgAdmin |
+| **CI/CD** | GitHub Actions |
+| **Testing** | Pytest |
+| **Monitoring** | Prometheus, Grafana, Node Exporter |
+| **DevOps Practices** | Makefile, Linting |
+
+---
+---
+
+## 🚀 Features
+
+### **Application**
+- Flask Notes App
+- CRUD API
+- PostgreSQL with SQLAlchemy
+- `/metrics` endpoint exposing Prometheus counters
+
+### **Infrastructure**
+All components are declared in `docker-compose.yml`:
+- `app`: Flask microservice
+- `db`: PostgreSQL database
+- `pgadmin`: for DB administration
+- `prometheus`: for metrics scraping
+- `grafana`: for dashboards
+
+### **Monitoring**
+Prometheus scrapes the Flask app and exposes metrics to Grafana dashboards.
+
+### **Database Administration**
+pgAdmin is provided to easily inspect and manage the database.
+
+---
+---
+
+## 📂 Project Structure
+
+```text
+devops-final-project/
+├── .github/workflows/ci.yml        # CI/CD pipeline
+├── app/                            # Flask microservice
+│   ├── app.py
+│   ├── requirements.txt
+│   ├── Dockerfile
+│   ├── static/                     # Static assets
+│   │   ├── css/
+│   │   │   └── style.css
+│   │   └── js/
+│   │       └── script.js
+│   └── templates/                  # HTML templates
+│       └── index.html
+├── tests/                          # Unit tests
+│   └── unit_test.py
+├── compose.yml                     # Base Compose setup
+├── compose.dev.yml                 # Development environment
+├── compose.stage.yml               # Staging environment
+├── compose.prod.yml                # Production environment
+├── prometheus/                     # Prometheus configuration
+│   └── prometheus.yml
+├── pgadmin/                        # pgAdmin configuration & scripts
+│   └── servers.json
+├── Makefile                        # Automation commands
+└── README.md
+```
+
+---
+---
+
+## 🧪 Testing
+
+Unit tests are implemented using **pytest** and use mocking for DB operations.
+
+Run tests locally:
+
+```bash
+pytest -v  tests/test_unit.py
+```
+
+---
+---
+
+## 🔄 GitHub Actions CI/CD Pipeline
+
+This GitHub Actions pipeline automates **testing**, **reporting**, and **deployment** for the repository.
+The workflow is triggered:
+
+- **On push** to the `dev` branch
+- **On pull_request** targeting `stage` or `prod` branches
+- **Manually** via `workflow_dispatch` with a configurable environment input
+
+---
+
+### 🔄 Workflow Steps
+
+#### 1️⃣ **Test Job**
+Runs on **Ubuntu** with **Python 3.10 and 3.12** using a matrix strategy:
+
+- Checkout the repository
+- Print the selected environment
+- Set up Python
+- Install dependencies from `app/requirements.txt`
+- Run `pytest` with coverage reports (**term**, **xml**, **html**)
+- Enforce a minimum coverage threshold of **80%**
+- Upload coverage reports as artifacts
+
+---
+
+#### 2️⃣ **Report Job**
+Runs **after the test job completes** (even if some tests fail):
+
+- Downloads coverage reports from all test jobs
+- Generates a consolidated **test matrix summary** for display in the GitHub workflow UI
+
+---
+
+#### 3️⃣ **Auto-Merge Dev → Stage**
+Triggered for **pull requests from `dev` to `stage`** after tests pass:
+
+- Automatically merges the PR using **GitHub CLI** if all checks pass
+
+---
+
+#### 4️⃣ **Manual Approval Stage → Prod**
+Triggered for **pull requests from `stage` to `prod`**:
+
+- Requires **manual approval** in GitHub UI before deployment
+- Associated with the **production environment** and **environment URL**
+
+---
+---
+
+## 🏗️ Infrastructure Setup
+
+Start the full environment:
+
+```bash
+make build
+```
+
+Download all the iamges necessary to be used
+
+```bash
+make pull
+```
+
+Launch the system
+```bash
+make up
+```
+
+Stop the system
+```bash
+make down
+```
+
+---
+---
+
+## Exposed Services
+
+| Service      | URL / Port                  |
+|-------------|-----------------------------|
+| **Flask App**   | http://localhost5000 |
+| **PostgreSQL**  | `localhost:5432`    |
+| **pgAdmin**     | http://localhost:8080 |
+| **prometheus**  | http://localhost:9090 |
+| **Grafana**     | http://localhost:3000|
+
+---
+---
+
+## 🗄️ pgAdmin Configuration
+
+pgAdmin automatically loads server settings from: `pgadmin/servers.json`
+
+### 🔐 Login Credentials
+- **Email:** `admin@admin.com`
+- **Password:** `admin`
+
+### 🛠️ PostgreSQL Connection Settings
+- **Host:** `db`
+- **User:** `notesuser`
+- **Password:** `notespass` *(must be entered manually)*
+
+---
+---
+
+## 📈 Metrics & Why They Matter
+
+| Metric | Importance |
+|--------|------------|
+| **Request Count** | Tracks traffic and system behavior |
+| **Container Health** | Ensures reliable deployments |
+
+---
+### 📈 Monitoring
+
+#### 🔍 Prometheus
+- **Access Prometheus at:**
+  [http://localhost9090
+
+- **Prometheus scrapes metrics from:**
+  `app:5000/metrics`
+
+---
+
+#### 📊 Grafana
+- **Access Grafana at:**
+  http://localhost:3000
+
+- **Login with:**
+  - **User:** `admin`
+  - **Password:** `admin`
+
+- **Add Prometheus as a datasource:**
+  `http://prometheus:9090`
+
+---
+---
+## 🧭 API Usage
+### ➕ Create a Note
+```bash
+curl -X POST http://localhost:5000/notes -H "Content-Type: application/json" \
+     -d '{"title":"Test","content":"Hello World"}'
+```
+
+### 📥 Fetch Notes
+```bash
+curl http://localhost:5000/notes
+```
+
+### 🗑️ Delete a Note
+```bash
+curl -X DELETE http://localhost:5000/notes/<ID>
+```
+
+### 📊 Metrics Endpoint
+http://localhost:5000/metrics
+
+
+---
+---
+## 📸 Screenshots (To be added)
+
+webapp
+
+pgAdmin connection
+
+Prometheus UI
+
+Grafana dashboard
+
+GitHub Actions pipeline run
