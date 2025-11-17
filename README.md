@@ -322,7 +322,14 @@ http://localhost:5000/metrics
 ![pgadmin](screenshots/pgadmin.png)
 
 **GitHub Actions pipeline run**
-![pgadmin](screenshots/pipeline_push.png)
+
+- PUSH:
+
+![pipeline](screenshots/pipeline_push.png)
+
+- STAGE to PROD:
+
+![pipeline](screenshots/stage-prod_pipeline.png)
 
 **Prometheus UI**
 
