@@ -242,7 +242,6 @@ pgAdmin automatically loads server settings from: `pgadmin/servers.json`
 | **Memory Usage** (`container_memory_usage_bytes`) | Prevents out-of-memory issues |
 | **Network I/O** (`rate(container_network_receive_bytes_total[5m])`, `rate(container_network_transmit_bytes_total[5m])`) | Monitors data flow between services |
 | **Disk I/O** (`rate(container_fs_reads_bytes_total[5m])`, `rate(container_fs_writes_bytes_total[5m])`) | Tracks storage performance |
-| **Error Rate** (`rate(flask_http_request_total{status=~"5.."}[5m])`) | Identifies failing requests |
 | **Uptime** (`process_start_time_seconds`) | Confirms service availability |
 
 
@@ -301,14 +300,31 @@ http://localhost:5000/metrics
 
 ---
 ---
-## 📸 Screenshots (To be added)
+## 📸 Screenshots
 
-webapp
+**Notes App**
 
-pgAdmin connection
+![Notes App](screenshots/notes-app.png)
 
-Prometheus UI
+**Notes App metrics**
 
-Grafana dashboard
+![App metrics](screenshots/notes-metrics.png)
 
-GitHub Actions pipeline run
+**cAdvisor**
+
+![pgadmin](screenshots/cadvisor.png)
+
+**pgAdmin**
+
+![pgadmin](screenshots/pgadmin.png)
+
+**GitHub Actions pipeline run**
+![pgadmin](screenshots/pipeline_push.png)
+
+**Prometheus UI**
+
+![pgadmin](screenshots/prometheus.png)
+
+
+**Grafana dashboard**
+![pgadmin](screenshots/grafana.png)
