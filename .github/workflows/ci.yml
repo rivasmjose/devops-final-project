@@ -48,7 +48,6 @@ jobs:
             htmlcov/
             retention-days: 1
 
-
   report:
     needs: test
     if: always()
