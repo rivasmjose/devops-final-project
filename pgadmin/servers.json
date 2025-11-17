@@ -1,0 +1,14 @@
+{
+  "Servers": {
+    "1": {
+      "Name": "notes-db",
+      "Group": "Servers",
+      "Host": "db",
+      "Port": 5432,
+      "MaintenanceDB": "notesdb",
+      "Username": "notesuser",
+      "SSLMode": "prefer",
+      "Comment": "Automatically added server"
+    }
+  }
+}
