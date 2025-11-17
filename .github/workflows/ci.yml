@@ -12,6 +12,11 @@ on:
         required: true
         default: "staging"
 
+permissions:
+  contents: write          # Needed for merges
+  pull-requests: write     # Required for gh pr merge
+  deployments: write       # Required for environment approval
+
 jobs:
   test:
     runs-on: ${{ matrix.os }}
@@ -44,9 +49,8 @@ jobs:
         uses: actions/upload-artifact@v4
         with:
           name: coverage-report-${{ matrix.python-version }}
-          path: |
-            htmlcov/
-            retention-days: 1
+          path: htmlcov/
+          retention-days: 1
 
   report:
     needs: test
@@ -76,9 +80,9 @@ jobs:
     if: github.event_name == 'pull_request' && github.base_ref == 'stage' && github.head_ref == 'dev'
     runs-on: ubuntu-latest
     steps:
+      - uses: actions/checkout@v4
       - name: Auto Merge PR
-        run: |
-          gh pr merge ${{ github.event.pull_request.number }} --merge --admin
+        run: gh pr merge ${{ github.event.pull_request.number }} --merge --admin
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
@@ -87,15 +91,17 @@ jobs:
     if: github.event_name == 'pull_request' && github.base_ref == 'prod' && github.head_ref == 'stage'
     runs-on: ubuntu-latest
     environment:
-        name: production
-        url: http://notes-app.com
+      name: production
+      url: http://notes-app.com
     steps:
-    - name: Require Manual Approval
-      run: echo "🟡 Waiting for manual approval to merge stage → prod"
+      - uses: actions/checkout@v4
 
-    - name: Merge PR after approval
-      run: |
-        echo "🔵 Approval granted. Merging PR..."
-        gh pr merge ${{ github.event.pull_request.number }} --merge --admin
-      env:
-        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      - name: Require Manual Approval
+        run: echo "🟡 Waiting for manual approval to merge stage → prod"
+
+      - name: Merge PR after approval
+        run: |
+          echo "🔵 Approval granted. Merging PR..."
+          gh pr merge ${{ github.event.pull_request.number }} --merge --admin
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
