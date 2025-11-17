@@ -90,6 +90,12 @@ jobs:
         name: production
         url: http://notes-app.com
     steps:
-      - name: Require Manual Approval
-        run: |
-          echo "✅ Tests passed. Please approve manually in GitHub UI."
+    - name: Require Manual Approval
+      run: echo "🟡 Waiting for manual approval to merge stage → prod"
+
+    - name: Merge PR after approval
+      run: |
+        echo "🔵 Approval granted. Merging PR..."
+        gh pr merge ${{ github.event.pull_request.number }} --merge --admin
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
