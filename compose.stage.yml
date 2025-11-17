@@ -1,0 +1,5 @@
+services:
+  app:
+    environment:
+      - FLASK_ENV=production
+      - APP_ENV=stage

@@ -1,0 +1,9 @@
+coverage
+flask
+flask_sqlalchemy
+isort
+prometheus-client
+psycopg2-binary
+pylint
+pytest
+pytest-cov

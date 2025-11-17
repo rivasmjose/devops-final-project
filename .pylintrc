@@ -1,0 +1,17 @@
+[MASTER]
+ignore=venv,migrations
+extension-pkg-whitelist=pydantic
+
+[MESSAGES CONTROL]
+disable=
+    missing-module-docstring,
+    missing-function-docstring,
+    redefined-outer-name,  # Common in pytest fixtures
+    too-few-public-methods, # For SQLAlchemy models
+    broad-except, # Often used in Flask apps
+
+[FORMAT]
+max-line-length=100
+
+[DESIGN]
+max-args=6

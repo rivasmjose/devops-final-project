@@ -1,0 +1,5 @@
+services:
+  app:
+    environment:
+      - FLASK_ENV=development
+      - APP_ENV=dev
