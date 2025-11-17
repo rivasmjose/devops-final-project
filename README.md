@@ -30,9 +30,12 @@ The application is a simple **Notes API** with persistence, metrics, and dashboa
 
 ## 👥 Team Members
 
-- *(Team member names)*
--
--
+- José Manuel Rivas
+- Daniel Varela
+- Andrés Vicente
+- Marcos Pérez
+- Raúl Solla
+- Ismael Jesús Bautista
 
 ---
 ---
